@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>서울시 공영주차장 안내</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<style>
+		html, body {
+			padding:0px;
+			margin:0px;
+			width:100%;
+			height:100%;
+		}
+	</style>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d0b3847034c27c026c1b898dfb931716&libraries=services"></script> 
+<script src="m3513.js"></script>
+</head>
+<body>
+
+<div id="cover_close" onclick="document.getElementById('cover_close').style.display = 'none';" style="cursor:pointer;">
+<!-- style.display = 'none': click 하면 사라짐 -->
+	<img src="bg_img.png" style="width:100%; height:100%; position:absolute; z-index:6;">
+	<img src="fg_txt.png" style="width:70%; height:100%;left:15%; position:absolute; z-index:7;">
+</div>
+<!--   1.지도  ->  3.셀렉트 유료 무료 버튼  4. 평일/주말, 평일 버튼 -> 5.버튼 -> 6.검정배경  ->  7.공영주차장그림 -->
+<div>
+
+<select id='pay' style="z-index:3; margin-left:10px; margin-top:5px; font-family:dotum; font-size:0.7em; vertical-align:middle;">
+ <option value='id'> 공원ID</option>
+ <option value='name'>공원명</option>
+ <option value='address' >주소</option> 
+</select>
+
+<input type="text" id="searchText" >
+
+<input  type='button' value='검색' id='button' style="font-family:dotum;z-index:5; font-size:0.7em; vertical-align:middle; margin-top:5px; background-color:#fff; border:0; cursor:pointer;"/>
+<input type="button" id="allPark" value="모든 공원" onfocus="searchTextFocus()">
+<input type="button" id="myPark" value="나와 가까운 공원" onfocus="searchMyLocPark()" >
+
+<p id="pTag">pp</p>
+</div>
+<div id="map" style="width:100%; height:100%; z-index:1;"></div>
+
+</body>
+</html>
