@@ -281,18 +281,52 @@ function parkList(parks)
 		   childUl.setAttribute("id","listUl"+i)
 		   document.getElementById("list").appendChild(childUl);
 
-		   var childLi = document.createElement("li");
-		   var childLi_text = document.createTextNode(park.P_PARK);
-		   childLi.appendChild(childLi_text);
+		   var childLi = document.createElement("li");		   
+		   childLi.appendChild(document.createTextNode(park.P_IDX+"  "));
+		   childLi.appendChild(document.createTextNode(park.P_PARK));
 		   document.getElementById("listUl"+i).appendChild(childLi);
 		   
 		   var childLi_content = document.createElement("li");
-		   childLi_content.setAttribute("id","liContent");
-		   var childLi_content_text =document.createTextNode(park.P_LIST_CONTENT+"'<br>'"+park.P_ADDR);
-		   childLi_content.appendChild(childLi_content_text);
+		   childLi_content.setAttribute("id","liContent");	   
+		   childLi_content.appendChild(document.createTextNode(park.P_LIST_CONTENT));//P_IDX
+		   childLi_content.appendChild(document.createElement("br"));
+		   
+		   var childImg = document.createElement("img");
+		   childImg.setAttribute("src",park.P_IMG);
+		   childImg.style.margin="10px";
+		   childImg.style.maxWidth = "900px";
+		   childLi_content.appendChild(childImg);
+		   childLi_content.appendChild(document.createElement("br"));
+		   childLi_content.appendChild(document.createTextNode("주소  |"+park.P_ADDR));
+		   childLi_content.appendChild(document.createElement("br"));
+		   childLi_content.appendChild(document.createTextNode("시설  |"+park.MAIN_EQUIP));
+		   childLi_content.appendChild(document.createElement("br"));
+		   childLi_content.appendChild(document.createTextNode("식물  |"+park.MAIN_PLANTS));
+		   childLi_content.appendChild(document.createElement("br"));
+		   childLi_content.appendChild(document.createTextNode("전화번호  |"+park.P_ADMINTEL));
+		   childLi_content.appendChild(document.createElement("br"));
 		   document.getElementById("listUl"+i).appendChild(childLi_content);
+
+		   var childDetail = document.createElement("details");
+		   childDetail.setAttribute("id","details"+i);
+		   childDetail.style.paddingLeft="15px";
+		   document.getElementById("listUl"+i).appendChild(childDetail);
+
+		   var childSummary = document.createElement("summary");
+		   childSummary.appendChild(document.createTextNode("오시는 길 "));
+		   document.getElementById("details"+i).appendChild(childSummary);
+
+		   var childP = document.createElement("p");
+		   childP.appendChild(document.createTextNode(park.VISIT_ROAD));
+		   document.getElementById("details"+i).appendChild(childP);
+		   
+		  /* childLi_content.appendChild(document.createTextNode("오는 길  |"+park.VISIT_ROAD));
+		   childLi_content.appendChild(document.createElement("br"));*/
+		   document.getElementById("listUl"+i).appendChild(childDetail);
+		   
 	   }
 }
+
 function addBound(){
 	// 지도에 표시할 원을 생성합니다
 	var bound = new daum.maps.Circle({
@@ -444,12 +478,36 @@ function myParkList()
 function searchPark()
 {
 	var map = document.getElementById("map");
+	var parkDiv =document.getElementById("parkDiv");
+	var list=document.getElementById("list");
+
 	if(map.style.display!="none")
 	{
-		var parkDiv =document.getElementById("parkDiv");
 		parkDiv.style.display="block";
-	}	
+		map.style.height="70%";
+	}
+	else if(map.style.display=="none" && list.style.display=="inline")
+	{
+		parkDiv.style.display="block";
+		map.style.display="block";
+		map.style.height="70%";
+		list.style.display="none";
+	}
 }
+
+function closeParkDiv()
+{
+	var map = document.getElementById("map");
+	var parkDiv =document.getElementById("parkDiv");
+	var list=document.getElementById("list");
+	
+	if(map.style.display!="none")
+	{
+		parkDiv.style.display="none";
+		map.style.height="82.5%";
+	}
+}
+
 
 function childParkList()
 {
