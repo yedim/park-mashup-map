@@ -2,44 +2,64 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>서울시 공영주차장 안내</title>
+    <title>서울시 공원 안내</title>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<style>
-		html, body {
-			padding:0px;
-			margin:0px;
-			width:100%;
-			height:100%;
-		}
-	</style>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d0b3847034c27c026c1b898dfb931716&libraries=services"></script> 
-<script src="m3513.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="m3513.css">	
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d0b3847034c27c026c1b898dfb931716&libraries=services"></script> 
+	<script src="m3513.js"></script>
 </head>
 <body>
 
+<div class="topnav" id="myTopnav">
+  <a href="" class="active"><b>서울시 공원 안내</b></a>
+  <a href="javascript:void(0);" onclick = "myParkList();return false" style="float:right">나의 공원</a>
+  <a href="javascript:void(0);" onclick ="childParkList();return false" style="float:right">상상어린이공원</a>
+  <a href="javascript:void(0);" onclick ="showlist();return false" style="float:right">공원목록</a>
+  <a href="javascript:void(0);" onclick ="searchPark();return false" style="float:right">공원검색</a>
+  
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
 <div id="cover_close" onclick="document.getElementById('cover_close').style.display = 'none';" style="cursor:pointer;">
-<!-- style.display = 'none': click 하면 사라짐 -->
-	<img src="bg_img.png" style="width:100%; height:100%; position:absolute; z-index:6;">
-	<img src="fg_txt.png" style="width:70%; height:100%;left:15%; position:absolute; z-index:7;">
+	<img src="bg_img.png" style="width:100%; height:82.5%; position:absolute; z-index:6;">
+    <img src="fg_txt.png" style="width:40%; height:30%;top:30%;right:10%;  position:absolute; z-index:7;">
 </div>
-<!--   1.지도  ->  3.셀렉트 유료 무료 버튼  4. 평일/주말, 평일 버튼 -> 5.버튼 -> 6.검정배경  ->  7.공영주차장그림 -->
-<div>
 
-<select id='pay' style="z-index:3; margin-left:10px; margin-top:5px; font-family:dotum; font-size:0.7em; vertical-align:middle;">
- <option value='id'> 공원ID</option>
- <option value='name'>공원명</option>
- <option value='address' >주소</option> 
-</select>
-
-<input type="text" id="searchText" >
-
-<input  type='button' value='검색' id='button' style="font-family:dotum;z-index:5; font-size:0.7em; vertical-align:middle; margin-top:5px; background-color:#fff; border:0; cursor:pointer;"/>
-<input type="button" id="allPark" value="모든 공원" onfocus="searchTextFocus()">
-<input type="button" id="myPark" value="나와 가까운 공원" onfocus="searchMyLocPark()" >
-
-<p id="pTag">pp</p>
+<div id="parkDiv" class="w3-panel w3-border w3-round w3-margin w3-padding" style="display:none;"><!--   -->
+	<label style="margin-right:5px;">공원찾기 </label>
+	<select id='parkSelect' class="w3-border" style="z-index:3;  font-size:1.2em; vertical-align:top;padding:5px;">
+	 <option value='id'> 공원ID</option>
+	 <option value='name'>공원명</option>
+	 <option value='address'>주소</option> 
+	</select>
+	
+	<input type="text" id="searchText" style="padding:5px;">
+	
+	<input type='button' class="w3-button w3-white w3-border" value='검색' id='button' style="font-family:dotum;z-index:5;vertical-align:top; background-color:#fff; border:0; cursor:pointer;"/>
+	<br>
+	<label style="vertical-align:middle;margin-right:5px;" >공원보기 </label>
+	<input type="button" class="w3-button w3-white w3-border" id="allPark" value="모든 공원" onfocus="searchTextFocus()">
+	<input type="button" class="w3-button w3-white w3-border" id="myPark" value="나와 가까운 공원" onfocus="searchMyLocPark()" >
+		
 </div>
-<div id="map" style="width:100%; height:100%; z-index:1;"></div>
 
+<div id="list" style="display:none;"> </div>
+
+<div id="childParkList" style="display:none;">
+	<p style="margin:10px;">상상어린이 공원 사업은 민선4기 공원녹지 정책 사업의 일환으로 서울의 노후화된 어린이 공원을 ‘상상어린이 공원’으로 재조성 하였습니다.
+	 계획과 조성 과정과 관리에 주민들과 어린이들이 함께 참여하도록 유도하였고, 자연친화적 소재를 사용하여 어린이 안전을 고려하였습니다.</p>
+</div>
+
+  <div id="mylist" style="display:none;">
+  	<p>나의 공원리스트 아직 준비중입니다.</p>
+  </div>
+  
+<div id="map" style="width:100%; height:82.5%; z-index:1;"></div>
+
+<div id="footer"> Copyright(c)2018 이예림 All rights reserved. </div>
 </body>
 </html>
