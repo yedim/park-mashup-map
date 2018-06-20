@@ -31,6 +31,7 @@ window.onload = function () {
 		handleRefresh();//지도의 중심이 이동될때도 마커를 다시 표시
 	});
 	parkListRefresh();
+	dreamParkListRefresh();
 	
 }
 
@@ -152,6 +153,15 @@ function parkListRefresh()
 	
 	$.getJSON(parkUrl, parkList);
 }
+
+function dreamParkListRefresh()
+{
+	var dreamparkUrl;
+	parkUrl = "http://openAPI.seoul.go.kr:8088/4466774450796c343936667a706565/json/ListDreamParksService/1/300";
+	
+	$.getJSON(parkUrl, dreamParkList);
+
+}
 function updatePark(parks) {//1번 호출
 	var parkSelect = document.getElementById("parkSelect");
 	var selectpark = parkSelect.selectedIndex;
@@ -194,7 +204,7 @@ function updatePark(parks) {//1번 호출
 		
       try{
     	  if(isMyLoc==false)
-  		{
+  		 {
   			
   			addr = park.ADDR;//중복되는 데이타는 제외
   			if(select=="id" || select=="name" ||select=="address" ){
@@ -293,6 +303,25 @@ function parkList(parks)
 		   document.getElementById("listUl"+i).appendChild(childGuideDetail);
 		 
 	   }
+}
+
+function dreamParkList(parks)
+{
+	var arr=parks.ListDreamParksService.row;
+	 for (var i = 0; i < arr.length; i++) {
+		   var park = arr[i];
+		   
+		   var childUl = document.createElement("ul");
+		   childUl.className="w3-ul w3-border w3-margin";
+		   childUl.setAttribute("id","dreamlistUl"+i)
+		   document.getElementById("dreamParkList").appendChild(childUl);
+
+		   var childLi = document.createElement("li");		   
+		   childLi.appendChild(document.createTextNode(park.P_PARK+"  "));
+		   childLi.appendChild(document.createTextNode(park.P_ADDR));
+		   document.getElementById("dreamlistUl"+i).appendChild(childLi);
+		   
+	 }
 }
 
 function addBound(){
@@ -421,6 +450,24 @@ function showlist()
 
 	var list=document.getElementById("list");
 	list.style.display="inline";
+
+	var dreamParkList=document.getElementById("dreamParkList");
+	dreamParkList.style.display="none";
+}
+
+function showDreamPark()
+{
+	var map = document.getElementById("map");
+	map.style.display="none";
+	
+	var parkDiv =document.getElementById("parkDiv");
+	parkDiv.style.display="none";
+
+	var list=document.getElementById("list");
+	list.style.display="none";
+	
+	var dreamParkList=document.getElementById("dreamParkList");
+	dreamParkList.style.display="inline";
 }
 
 function searchPark()
@@ -428,18 +475,19 @@ function searchPark()
 	var map = document.getElementById("map");
 	var parkDiv =document.getElementById("parkDiv");
 	var list=document.getElementById("list");
-
+	var dreamParkList=document.getElementById("dreamParkList");
+	
 	if(map.style.display!="none")
 	{
 		parkDiv.style.display="block";
 	}
-	else if(map.style.display=="none" && list.style.display=="inline")
+	else if((map.style.display=="none" && list.style.display=="inline") || (map.style.display=="none" && dreamParkList.style.display=="inline"))
 	{
 		parkDiv.style.display="block";
 		map.style.display="block";
 		list.style.display="none";
-	}
-	
+		dreamParkList.style.display="none";
+	}	
 	
 }
 
