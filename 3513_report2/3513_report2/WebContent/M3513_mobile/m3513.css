@@ -15,9 +15,9 @@ html, body {
   display: block;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
+  padding: 20px 26px;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 30px;
 }
 
 .topnav a:hover {
@@ -29,26 +29,25 @@ html, body {
 #footer
 {
 	background-color:rgb(40,75,29);
-	height:80px;
+	height:130px;
 	width:100%;
 	text-align:center;
 	font-size:0.9em;
 }
 .responsive{
-	width: 100%;
-	max-width:400px;
+	max-width: 100%;
     height: auto;
 }
 .responsive2
 {
 	width: 100%;
-    max-width: 400px;
+    max-width: 700px;
     height: auto;
 }
 
 div#map {
-	margin: 5px;
+	margin: 20px;
 	/*width: 250px;*/
-	height: 600px;
+	height: 1450px;
 	border: 1px solid black;
 }
