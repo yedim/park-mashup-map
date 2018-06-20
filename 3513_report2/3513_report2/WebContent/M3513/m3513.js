@@ -27,6 +27,9 @@ window.onload = function () {
 	var button = document.getElementById("button");
 	button.onclick = handleRefresh;//검색버튼을 클릭할때 마커표시
 	
+	var dreamButton=document.getElementById("dreamButton");
+	dreamButton.onclick=updateDreamParkList;
+	
 	daum.maps.event.addListener(map, 'dragend', function() {
 		handleRefresh();//지도의 중심이 이동될때도 마커를 다시 표시
 	});
@@ -317,11 +320,58 @@ function dreamParkList(parks)
 		   document.getElementById("dreamParkList").appendChild(childUl);
 
 		   var childLi = document.createElement("li");		   
-		   childLi.appendChild(document.createTextNode(park.P_PARK+"  "));
-		   childLi.appendChild(document.createTextNode(park.P_ADDR));
+		   childLi.appendChild(document.createTextNode(park.P_PARK));
+		   childLi.setAttribute("id","dreamlistPark"+i);
 		   document.getElementById("dreamlistUl"+i).appendChild(childLi);
 		   
+		   var childAddr = document.createElement("li");
+		   childAddr.appendChild(document.createTextNode(park.P_ADDR));
+		   childAddr.setAttribute("id","dreamlistAddr"+i);
+		   document.getElementById("dreamlistUl"+i).appendChild(childAddr);
+
 	 }
+}
+
+function updateDreamParkList(){
+	var parkSelect = document.getElementById("dreamParkSelect");
+	var selectpark = parkSelect.selectedIndex;
+	var whatpark = parkSelect[selectpark].value;
+	var searchText = document.getElementById("dreamSearchText").value;
+
+	var parkUl;
+	var parktext;
+	var parkId;
+	
+	 if(whatpark=='dreamName'){ //상상어린이공원이름
+		 for (var i = 0; i < 300; i++) {
+			 parkUl=document.getElementById("dreamlistUl"+i);
+			 parkId =document.getElementById("dreamlistPark"+i);
+
+			 parktext=parkId.innerHTML;
+			 if(!parktext.includes(searchText)){	
+				 parkUl.style.display="none";
+			 }
+			 else{
+				 parkUl.style.display="block";
+			 }
+		 }	
+	 }
+	 else if(whatpark=='dreamAddress'){//상상어린이공원주소
+		 for (var i = 0; i < 300; i++) {
+			 parkUl=document.getElementById("dreamlistUl"+i);
+			 parkId =document.getElementById("dreamlistAddr"+i);
+
+			 parktext=parkId.innerHTML;
+			 if(!parktext.includes(searchText)){	
+				 parkUl.style.display="none";
+			 }
+			 else{
+				 parkUl.style.display="block";
+			 }
+		 }	
+	 }
+	
+	 
 }
 
 function addBound(){
@@ -439,6 +489,8 @@ function firstPage()
 	var list=document.getElementById("list");
 	list.style.display="none";
 
+	var dreamParkList=document.getElementById("dreamParkList");
+	dreamParkList.style.display="none";
 }
 function showlist()
 {
@@ -467,7 +519,7 @@ function showDreamPark()
 	list.style.display="none";
 	
 	var dreamParkList=document.getElementById("dreamParkList");
-	dreamParkList.style.display="inline";
+	dreamParkList.style.display="block";
 }
 
 function searchPark()

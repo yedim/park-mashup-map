@@ -51,12 +51,26 @@
 		
 </div>
 
-<div id="dreamParkList" style="display:none;"> </div>
+<div id="dreamParkList" class="w3-panel w3-border w3-round w3-margin w3-padding"  style="display:none;">
+	<label style="margin-right:5px;">상상어린이공원찾기 </label>
+	<select id='dreamParkSelect' class="w3-border" style="z-index:3;  font-size:0.7em; vertical-align:top;padding:5px;">
+	 <option value='dreamName'>공원명</option>
+	 <option value='dreamAddress'>주소</option> 
+	</select>
+	<input type="text" id="dreamSearchText" style="padding:5px;">
+	<input type='button' class="w3-button w3-white w3-border" value='검색' id='dreamButton' style=" font-size:0.7em;font-family:dotum;z-index:5;vertical-align:top; background-color:#fff; border:0; cursor:pointer;"/>
+	<br>
+
+ </div>
 
 <div id="list" style="display:none;"> </div>
 
 
 <div id="map" ></div>
+
+<audio controls autoplay>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
 
 <div id="footer" style="color:white"> Copyright(c)2018 이예림 All rights reserved. </div>
 </body>
