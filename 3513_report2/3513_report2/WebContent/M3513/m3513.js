@@ -7,6 +7,7 @@ var mylocPosition;//나의 위치
 var myMarker;
 var myinfowindow;
 var lat, lon;
+var pi=0;
 
 window.onload = function () {
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -30,11 +31,16 @@ window.onload = function () {
 	var dreamButton=document.getElementById("dreamButton");
 	dreamButton.onclick=updateDreamParkList;
 	
+	var protectButton=document.getElementById("protectButton");
+	protectButton.onclick=updateProtectParkList;
+	
 	daum.maps.event.addListener(map, 'dragend', function() {
 		handleRefresh();//지도의 중심이 이동될때도 마커를 다시 표시
 	});
 	parkListRefresh();
 	dreamParkListRefresh();
+	cultureActivityRefresh();
+	protectParkListRefresh();
 	
 }
 
@@ -50,7 +56,6 @@ function computeDistance (startCoords,destCoords){
     var distance = Math.acos(Math.sin(startLatRads) * Math.sin(destLatRads ) +
                              Math.cos(startLatRads) * Math.cos(destLatRads )  *
                              Math.cos(startLongRads -destLongRads )) * Radius;
-    
     return distance ;
 }
 
@@ -59,18 +64,15 @@ function degreesToRadians(degrees){
     return radians;
 }
 
-function searchTextFocus()
-{
+function searchTextFocus(){
 	 document.getElementById("searchText").value="";
 	 isMyLoc=false;
      handleRefresh();
 }
 
-function searchMyLocPark()
-{
+function searchMyLocPark(){
 	 document.getElementById("searchText").value="";
 	 
-		
 	  var locPosition = new daum.maps.LatLng(37.466554, 126.932919), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
       message = '<div style="padding:5px;">반경 3km이내 공원</div>'; // 인포윈도우에 표시될 내용입니다
       
@@ -83,7 +85,6 @@ function searchMyLocPark()
 	 
 	 isMyLoc=true;
 	 removeMarker();
-
 }
 //지도에 마커와 인포윈도우를 표시하는 함수입니다
 function displayMarker(locPosition, message) {
@@ -105,7 +106,6 @@ function displayMarker(locPosition, message) {
     
     // 인포윈도우를 마커위에 표시합니다 
     myinfowindow.open(map, myMarker);
-    
     // 지도 중심좌표를 접속위치로 변경합니다
     map.setCenter(locPosition);    
 }    
@@ -160,9 +160,25 @@ function parkListRefresh()
 function dreamParkListRefresh()
 {
 	var dreamparkUrl;
-	parkUrl = "http://openAPI.seoul.go.kr:8088/4466774450796c343936667a706565/json/ListDreamParksService/1/300";
+	dreamparkUrl = "http://openAPI.seoul.go.kr:8088/4466774450796c343936667a706565/json/ListDreamParksService/1/300";
 	
-	$.getJSON(parkUrl, dreamParkList);
+	$.getJSON(dreamparkUrl, dreamParkList);
+
+}
+
+function cultureActivityRefresh()
+{
+	var cultureUrl;
+	cultureUrl = "http://openAPI.seoul.go.kr:8088/4466774450796c343936667a706565/json/SearchCulturalActivityService/1/5/"
+
+	$.getJSON(cultureUrl,cultureList);
+}
+
+function protectParkListRefresh()
+{
+	var protectUrl;
+	protectUrl="http://openapi.seoul.go.kr:8088/4466774450796c343936667a706565/json/SeoulTotalEcologyInfo/1/78"
+	$.getJSON(protectUrl,protectList);
 
 }
 function updatePark(parks) {//1번 호출
@@ -332,6 +348,34 @@ function dreamParkList(parks)
 	 }
 }
 
+function cultureList(parks){
+	var arr=parks.SearchCulturalActivityService.row;
+	 for (var i = 0; i < arr.length; i++) {
+		   var park = arr[i];
+		   
+		   var childUl = document.createElement("ul");
+		   childUl.className="w3-ul w3-border w3-margin";
+		   childUl.setAttribute("id","modalUl"+i)
+		   document.getElementById("modal").appendChild(childUl);
+
+		   var childLi = document.createElement("li");		   
+		   childLi.appendChild(document.createTextNode(park.TITLE));
+		   childLi.setAttribute("id","modalTitle"+i);
+		   document.getElementById("modalUl"+i).appendChild(childLi);
+		   
+		   var childPlace = document.createElement("li");
+		   childPlace.appendChild(document.createTextNode(park.PLACE));
+		   childPlace.setAttribute("id","modalPlace"+i);
+		   document.getElementById("modalUl"+i).appendChild(childPlace);
+
+		   var childDate = document.createElement("li");
+		   childDate.appendChild(document.createTextNode(park.SDATE + " - "+park.EDATE));
+		   childDate.setAttribute("id","modalDate"+i);
+		   document.getElementById("modalUl"+i).appendChild(childDate);
+
+	 }
+}
+
 function updateDreamParkList(){
 	var parkSelect = document.getElementById("dreamParkSelect");
 	var selectpark = parkSelect.selectedIndex;
@@ -374,6 +418,81 @@ function updateDreamParkList(){
 	 
 }
 
+function protectList(parks){
+	var arr=parks.SeoulTotalEcologyInfo.row;
+	 for (var i = 0; i < arr.length; i++) {
+		   var park = arr[i];
+		   var parkName=park.AREANAME;
+		   if(parkName.includes('공원'))
+		   {
+			   var childUl = document.createElement("ul");
+			   childUl.className="w3-ul w3-border w3-margin";
+			   childUl.setAttribute("id","protectUl"+pi)
+			   document.getElementById("protectParkList").appendChild(childUl);
+
+			   var childAreaName = document.createElement("li");		   
+			   childAreaName.appendChild(document.createTextNode(park.AREANAME));
+			   childAreaName.style.fontWeight="bold";
+			   childAreaName.setAttribute("id","protectAreaName"+pi);
+			   document.getElementById("protectUl"+pi).appendChild(childAreaName);
+			   
+			   var childAreaAddr = document.createElement("li");		   
+			   childAreaAddr.appendChild(document.createTextNode(park.AREAADDR));
+			   document.getElementById("protectUl"+pi).appendChild(childAreaAddr);
+			   
+			   var childJiJungMok = document.createElement("li");		   
+			   childJiJungMok.appendChild(document.createTextNode(park.JIJUNGMOK));
+			   document.getElementById("protectUl"+pi).appendChild(childJiJungMok);
+			   
+			   var childIlBanHyun= document.createElement("li");		   
+			   childIlBanHyun.appendChild(document.createTextNode(park.ILBANHYUN));
+			   document.getElementById("protectUl"+pi).appendChild(childIlBanHyun);
+			   
+			   pi++;
+		   }
+	 }
+}
+
+function updateProtectParkList()
+{
+	var parkSelect = document.getElementById("protectParkSelect");
+	var selectpark = parkSelect.selectedIndex;
+	var whatpark = parkSelect[selectpark].value;
+	var searchText = document.getElementById("protectSearchText").value;
+
+	var parkUl;
+	var parktext;
+	var parkId;
+	
+	 if(whatpark=='protectName'){ //보호공원이름
+		 for (var i = 0; i < pi; i++) {
+			 parkUl=document.getElementById("protectUl"+i);
+			 parkId =document.getElementById("protectAreaName"+i);
+
+			 parktext=parkId.innerHTML;
+			 if(!parktext.includes(searchText)){	
+				 parkUl.style.display="none";
+			 }
+			 else if(parktext.includes('공원') && parktext.includes(searchText)){
+					 parkUl.style.display="block";
+			 }
+		 }	
+	 }
+	 else if(whatpark=='protectAddress'){//상상어린이공원주소
+		 for (var i = 0; i < pi; i++) {
+			 parkUl=document.getElementById("protectUl"+i);
+			 parkId =document.getElementById("protectAreaName"+i);
+
+			 parktext=parkId.innerHTML;
+			 if(!parktext.includes(searchText) ){	
+				 parkUl.style.display="none";
+			 }
+			 else if(parktext.includes('공원') && parktext.includes(searchText)){
+				 parkUl.style.display="block";
+			 }
+		 }
+	 }
+}
 function addBound(){
 	// 지도에 표시할 원을 생성합니다
 	var bound = new daum.maps.Circle({
@@ -491,7 +610,11 @@ function firstPage()
 
 	var dreamParkList=document.getElementById("dreamParkList");
 	dreamParkList.style.display="none";
+	
+	var protectParkList =document.getElementById("protectParkList");
+	protectParkList.style.display="none";
 }
+
 function showlist()
 {
 	var map = document.getElementById("map");
@@ -505,6 +628,9 @@ function showlist()
 
 	var dreamParkList=document.getElementById("dreamParkList");
 	dreamParkList.style.display="none";
+	
+	var protectParkList =document.getElementById("protectParkList");
+	protectParkList.style.display="none";
 }
 
 function showDreamPark()
@@ -520,6 +646,27 @@ function showDreamPark()
 	
 	var dreamParkList=document.getElementById("dreamParkList");
 	dreamParkList.style.display="block";
+	
+	var protectParkList =document.getElementById("protectParkList");
+	protectParkList.style.display="none";
+}
+
+function showProtectPark()
+{
+	var map = document.getElementById("map");
+	map.style.display="none";
+	
+	var parkDiv =document.getElementById("parkDiv");
+	parkDiv.style.display="none";
+
+	var list=document.getElementById("list");
+	list.style.display="none";
+	
+	var dreamParkList=document.getElementById("dreamParkList");
+	dreamParkList.style.display="none";
+	
+	var protectParkList =document.getElementById("protectParkList");
+	protectParkList.style.display="block";
 }
 
 function searchPark()
@@ -539,8 +686,8 @@ function searchPark()
 		map.style.display="block";
 		list.style.display="none";
 		dreamParkList.style.display="none";
-	}	
-	
+		protectParkList.style.display="none";
+	}		
 }
 
 function closeParkDiv()
